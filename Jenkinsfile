@@ -134,7 +134,7 @@ pipeline {
                 emailext(
                     to: '$DEFAULT_RECIPIENTS',
                     subject: "Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Good news! The build was successful.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nCheck it here: ${env.BUILD_URL}"
+                    body: "Good news! The build xwas successful.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nCheck it here: ${env.BUILD_URL}"
                 )
             }
         }
