@@ -112,8 +112,11 @@ pipeline {
                         git config --global user.name "Jenkins-ci"
                         git add .
                         git commit -m "Update Image tag to ${VERSION}"
-                        git push
                     """
+                    withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
+                        //sh "git push origin tag ${VERSION}"
+                        sh "git push https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git"
+                    }
                 //}
             }
         }
