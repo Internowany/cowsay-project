@@ -84,25 +84,6 @@ pipeline {
                 }
             }
         }
-        /*stage('Deploy in Prod') {
-            when {
-                expression { "${Release}" == 'True' }
-            }
-            steps {
-                echo 'Deploying in Production...'
-                script {
-                    sh '''
-                        ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click -o StrictHostKeyChecking=accept-new "docker rm -f cowsay"
-                        ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "rm -rf *"
-                        ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}"
-                        ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "docker pull ${ECR_REPO}:latest"
-                        ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "docker tag ${ECR_REPO}:latest cowsay_project-app:latest"
-                        ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "docker run -d -p 8082:8082 --name cowsay cowsay_project-app:latest"
-                        ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "docker rmi ${ECR_REPO}:latest"
-                    '''
-                }
-            }
-        }*/
         stage('Push tag to git') {
             when {
                 expression { "${Release}" == 'True' }
@@ -115,8 +96,8 @@ pipeline {
                     sh "git push https://Internowany:$TOKEN@github.com/Internowany/cowsay-project.git tag ${VERSION}"
                 }
                 echo 'Updating version in manifest...'
-                withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
-                    git branch: 'master', credentialsId: 'Internowany', url: 'https://github.com/Internowany/demo-crm.git'
+                withCredentials([usernamePassword(credentialsId: 'internowany-at-github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    git branch: 'master', credentialsId: 'internowany-at-github', url: 'https://github.com/Internowany/demo-crm.git'
                     sh """
                         sed -i 's/tag:*/tag: "${VERSION}"/g' demo-crm/app-democrm/values.yaml
                         echo 'Git Config'
