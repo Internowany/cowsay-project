@@ -103,18 +103,18 @@ pipeline {
                 }
             }
         }*/
-        /*stage('Push tag to git') {
+        stage('Push tag to git') {
             when {
                 expression { "${Release}" == 'True' }
             }
             steps {
                 sh "git tag ${VERSION}"
-                withCredentials([string(credentialsId: 'gitlab-at2', variable: 'TOKEN')]) {
+                withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
                     //sh "git push origin tag ${VERSION}"
-                    sh "git push http://seba:$TOKEN@devops.internowany.click:8081/seba/cowsay_project.git tag ${VERSION}"
+                    sh "git push http://Internowany:$TOKEN@github.com:Internowany/cowsay-project.git tag ${VERSION}"
                 }
             }
-        }*/
+        }
         stage('Cleanup') {
             steps {
                 echo 'Cleaning garbage...'
