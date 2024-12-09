@@ -102,7 +102,7 @@ pipeline {
             }
             steps {
                 echo 'Updating version in manifest...'
-                withCredentials([string(credentialsId: 'Internowany')]) {
+                withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
                     git branch: 'master', credentialsId: 'Internowany', url: 'https://github.com/Internowany/demo-crm.git'
                     sh """
                         sed -i 's/tag:*/tag: "${VERSION}"/g' demo-crm/app-democrm/values.yaml
