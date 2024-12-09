@@ -15,6 +15,7 @@ pipeline {
             steps {
                 checkout scm
                 script {
+                    sh 'git fetch --tags'
                     COMMIT = sh(returnStdout: true, script:'git log --pretty=format:"%s" | head -1')
                     VERSION = sh(returnStdout: true, script:'git tag --sort=-creatordate | head -1')
                     def versionParts = VERSION.tokenize('.')
