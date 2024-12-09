@@ -46,7 +46,7 @@ pipeline {
                     }
                     def newVersion = "${major}.${minor}.${patch}"
                     sh "echo 'New version: ${newVersion}'"
-                    VERSION = "${newVersion}"
+                    VERSION = "4.0.0"
                     sh "echo '${VERSION}'"
                 }
             }
