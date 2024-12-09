@@ -111,7 +111,7 @@ pipeline {
                 sh "git tag ${VERSION}"
                 withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
                     //sh "git push origin tag ${VERSION}"
-                    sh "git push https://Internowany:$TOKEN@github.com:Internowany/cowsay-project.git tag ${VERSION}"
+                    sh "git push https://Internowany:$TOKEN@github.com/Internowany/cowsay-project.git tag ${VERSION}"
                 }
             }
         }
