@@ -117,6 +117,7 @@ pipeline {
                 echo 'Updating version in manifest...'
                 withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
                     sh """
+                        rm -rf demo-crm
                         git clone https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
                         pwd
                         sed -i "s/tag: .*/tag: ${VERSION}/g" demo-crm/app-democrm/values.yaml
