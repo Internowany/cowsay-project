@@ -125,7 +125,8 @@ pipeline {
                         echo 'Git Config'
                         git config --global user.email "Jenkins@internowany.click"
                         git config --global user.name "Jenkins-ci"
-                        git add . -m "Update Image tag to ${VERSION}"
+                        git add .
+                        git commit -m "Update Image tag to ${VERSION}"
                         git push https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
                     """
                 }
