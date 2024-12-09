@@ -1,6 +1,6 @@
 {
   "name": "express_cowsay",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Cowsay running over Express",
   "author": "Cassi Lup <cassi.lup@gmail.com>",
   "main": "index.js",
