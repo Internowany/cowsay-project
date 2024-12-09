@@ -1,0 +1,12 @@
+services:
+  app:
+    build: ./app
+    container_name: app
+    ports:
+      - "8082:8082"
+    networks:
+      - mynet
+
+networks:
+  mynet:
+    name: mynet
