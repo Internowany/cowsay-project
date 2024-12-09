@@ -6,7 +6,7 @@ pipeline {
     environment {
         AWS_REGION = 'eu-central-1'
         ECR_REPO = '017820661172.dkr.ecr.eu-central-1.amazonaws.com/seba/cowsay_project'
-        IMAGE_TAG = 'latest' // or use 'BUILD_NUMBER' for a unique tag per build
+        IMAGE_TAG = 'latest' // or use 'BUILD_NUMBER' for a unique tag per builds
         VERSION = ''
         COMMIT = ''
     }
