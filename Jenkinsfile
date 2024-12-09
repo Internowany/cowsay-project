@@ -96,7 +96,7 @@ pipeline {
                 }
             }
         }
-        stage('Push tag to git') {
+        stage('Update ArgoCD') {
             when {
                 expression { "${Release}" == 'True' }
             }
