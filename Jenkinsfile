@@ -9,6 +9,8 @@ pipeline {
         IMAGE_TAG = 'latest' // or use 'BUILD_NUMBER' for a unique tag per build
         VERSION = ''
         COMMIT = ''
+        AWS_ACCESS_KEY_ID = credentials('AKIAQIJRRWW2EPIR4QUL')
+        AWS_SECRET_ACCESS_KEY = credentials('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')
     }
     stages {
         stage('Checkout') {
@@ -74,6 +76,7 @@ pipeline {
                 script {
                     sh '''
                         aws sts get-caller-identity --region eu-central-1
+                        aws sts get-caller-identity
                         aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
                         docker tag cowsay_project-app:latest ${ECR_REPO}:${VERSION}
                         docker tag cowsay_project-app:latest ${ECR_REPO}:latest
