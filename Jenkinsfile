@@ -102,7 +102,7 @@ pipeline {
             }
             steps {
                 echo 'Updating version in manifest...'
-                withCredentials([string(credentialsId: 'internowany-at-github', variable: 'TOKEN')]) {
+                //withCredentials([string(credentialsId: 'internowany-at-github', variable: 'TOKEN')]) {
                     git branch: 'master', credentialsId: 'internowany-at-github', url: 'git@github.com:Internowany/demo-crm.git'
                     sh """
                         sed -i 's/tag:*/tag: "${VERSION}"/g' demo-crm/app-democrm/values.yaml
@@ -114,7 +114,7 @@ pipeline {
                         git commit -m "Update Image tag to ${VERSION}"
                         git push
                     """
-                }
+                //}
             }
         }
         stage('Cleanup') {
