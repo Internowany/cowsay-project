@@ -72,7 +72,7 @@ pipeline {
                 echo 'Deploying to ECR...'
                 sh "echo '${VERSION}'"
                 script {
-                    sh """
+                    sh '''
                         aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
                         docker tag cowsay_project-app:latest ${ECR_REPO}:${VERSION}
                         docker tag cowsay_project-app:latest ${ECR_REPO}:latest
@@ -80,7 +80,7 @@ pipeline {
                         docker push ${ECR_REPO}:latest
                         docker rmi ${ECR_REPO}:${VERSION}
                         docker rmi ${ECR_REPO}:latest
-                    """
+                    '''
                 }
             }
         }
