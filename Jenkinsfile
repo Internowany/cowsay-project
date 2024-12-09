@@ -89,15 +89,21 @@ pipeline {
                 expression { "${Release}" == 'True' }
             }
             steps {
-                echo 'Tagging in git...'
                 sh "git tag ${VERSION}"
                 withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
                     //sh "git push origin tag ${VERSION}"
                     sh "git push https://Internowany:$TOKEN@github.com/Internowany/cowsay-project.git tag ${VERSION}"
                 }
+            }
+        }
+        stage('Push tag to git') {
+            when {
+                expression { "${Release}" == 'True' }
+            }
+            steps {
                 echo 'Updating version in manifest...'
-                withCredentials([string(credentialsId: 'internowany-at-github')]) {
-                    git branch: 'master', credentialsId: 'internowany-at-github', url: 'https://github.com/Internowany/demo-crm.git'
+                withCredentials([string(credentialsId: 'Internowany')]) {
+                    git branch: 'master', credentialsId: 'Internowany', url: 'https://github.com/Internowany/demo-crm.git'
                     sh """
                         sed -i 's/tag:*/tag: "${VERSION}"/g' demo-crm/app-democrm/values.yaml
                         echo 'Git Config'
