@@ -140,7 +140,7 @@ pipeline {
                 emailext(
                     to: '$DEFAULT_RECIPIENTS',
                     subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Unfortunately, the build failed.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nCheck the console output to view the details: ${env.BUILD_URL}"
+                    body: "Unfortunately, the1 build failed.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nCheck the console output to view the details: ${env.BUILD_URL}"
                 )
             }
         }
