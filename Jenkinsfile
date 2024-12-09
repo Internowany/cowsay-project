@@ -101,7 +101,7 @@ pipeline {
                 expression { "${Release}" == 'True' }
             }
             steps {
-                echo 'Updating version in manifest...'
+                echo '2Updating version in manifest...'
                 //withCredentials([string(credentialsId: 'internowany-at-github', variable: 'TOKEN')]) {
                     git branch: 'master', credentialsId: 'internowany-at-github', url: 'git@github.com:Internowany/demo-crm.git'
                     sh """
