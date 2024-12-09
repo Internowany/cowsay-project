@@ -6,7 +6,7 @@ pipeline {
     environment {
         AWS_REGION = 'eu-central-1'
         ECR_REPO = '017820661172.dkr.ecr.eu-central-1.amazonaws.com/seba/cowsay_project'
-        IMAGE_TAG = 'latest' // or use 'BUILD_NUMBER' for a unique tag per builds
+        IMAGE_TAG = 'latest'
         VERSION = ''
         COMMIT = ''
     }
@@ -91,7 +91,6 @@ pipeline {
             steps {
                 sh "git tag ${VERSION}"
                 withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
-                    //sh "git push origin tag ${VERSION}"
                     sh "git push https://Internowany:$TOKEN@github.com/Internowany/cowsay-project.git tag ${VERSION}"
                 }
             }
@@ -103,22 +102,19 @@ pipeline {
             steps {
                 echo 'Updatingsss version in manifest...'
                 sh 'cd ..'
-                //withCredentials([string(credentialsId: 'internowany-at-github', variable: 'TOKEN')]) {
-                    git branch: 'master', credentialsId: 'internowany-at-github', url: 'git@github.com:Internowany/demo-crm.git', changelog: false, poll: false
-                    sh """
-                        sed -i 's/tag:.*/tag: "${VERSION}"/g' app-democrm/values.yaml
-                        echo 'Git Config'
-                        git checkout master
-                        git config --global user.email "Jenkins@internowany.click"
-                        git config --global user.name "Jenkins-ci"
-                        git add .
-                        git commit -m "Update Image tag to ${VERSION}"
-                    """
-                    withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
-                        //sh "git push origin tag ${VERSION}"
-                        sh "git push https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git"
-                    }
-                //}
+                git branch: 'master', credentialsId: 'internowany-at-github', url: 'git@github.com:Internowany/demo-crm.git', changelog: false, poll: false
+                sh """
+                    sed -i 's/tag:.*/tag: "${VERSION}"/g' app-democrm/values.yaml
+                    echo 'Git Config'
+                    git checkout master
+                    git config --global user.email "Jenkins@internowany.click"
+                    git config --global user.name "Jenkins-ci"
+                    git add .
+                    git commit -m "Update Image tag to ${VERSION}"
+                """
+                withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
+                    sh "git push https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git"
+                }
             }
         }
         stage('Cleanup') {
@@ -146,7 +142,7 @@ pipeline {
                 emailext(
                     to: '$DEFAULT_RECIPIENTS',
                     subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Unfortunately, the1 build failed.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nCheck the console output to view the details: ${env.BUILD_URL}"
+                    body: "Unfortunately, the build failed.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nCheck the console output to view the details: ${env.BUILD_URL}"
                 )
             }
         }
