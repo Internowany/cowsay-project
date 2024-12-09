@@ -116,7 +116,7 @@ pipeline {
                 }
                 echo 'Updating version in manifest...'
                 withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
-                    sh '''
+                    sh """
                         rm -rf demo-crm
                         git clone https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
                         pwd
@@ -125,11 +125,10 @@ pipeline {
                         echo 'Git Config'
                         git config --global user.email "Jenkins@internowany.click"
                         git config --global user.name "Jenkins-ci"
-                        git add demo-crm/app-democrm/values.yaml
-                        git commit -am "Update Image tag to ${VERSION}"
+                        git add . -m "Update Image tag to ${VERSION}"
                         git push https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
-                    '''
-                }                
+                    """
+                }
             }
         }
         stage('Cleanup') {
