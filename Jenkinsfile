@@ -131,7 +131,7 @@ pipeline {
         }
         stage('Cleanup') {
             steps {
-                echo 'Cleaning garbage...'
+                echo 'Cleaning garbagee...'
                 sh '''
                     docker rm -f app
                     docker rmi cowsay_project-app:latest
