@@ -96,7 +96,7 @@ pipeline {
                     sh "git push https://Internowany:$TOKEN@github.com/Internowany/cowsay-project.git tag ${VERSION}"
                 }
                 echo 'Updating version in manifest...'
-                withCredentials([usernamePassword(credentialsId: 'internowany-at-github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                withCredentials([string(credentialsId: 'internowany-at-github')]) {
                     git branch: 'master', credentialsId: 'internowany-at-github', url: 'https://github.com/Internowany/demo-crm.git'
                     sh """
                         sed -i 's/tag:*/tag: "${VERSION}"/g' demo-crm/app-democrm/values.yaml
