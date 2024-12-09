@@ -118,11 +118,12 @@ pipeline {
                 withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
                     sh """
                         git clone https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
-                        sed -i "s/tag: .*/tag: ${VERSION}/g" app-democrm/values.yaml
+                        pwd
+                        sed -i "s/tag: .*/tag: ${VERSION}/g" demo-crm/app-democrm/values.yaml
                         echo 'Git Config'
                         git config --global user.email "Jenkins@internowany.click"
                         git config --global user.name "Jenkins-ci"'
-                        git add app-democrm/values.yaml
+                        git add demo-crm/app-democrm/values.yaml
                         git commit -am "Update Image tag to ${VERSION}"
                         git push https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
                     """
