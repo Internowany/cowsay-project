@@ -16,7 +16,8 @@ pipeline {
                 checkout scm
                 script {
                     COMMIT = sh(returnStdout: true, script:'git log --pretty=format:"%s" | head -1')
-                    VERSION = "1.0.0"
+                    VERSION = sh(returnStdout: true, script:'git tag --sort=-creatordate | head -1')
+                    sh "echo '${VERSION}'"
                     if ($VERSION == '') {
                         sh "echo 'v1.0.0 release'"
                         VERSION = '1.0.0'
