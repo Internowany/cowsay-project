@@ -105,7 +105,7 @@ pipeline {
                 //withCredentials([string(credentialsId: 'internowany-at-github', variable: 'TOKEN')]) {
                     git branch: 'master', credentialsId: 'internowany-at-github', url: 'git@github.com:Internowany/demo-crm.git'
                     sh """
-                        sed -i 's/tag:*/tag: "${VERSION}"/g' demo-crm/app-democrm/values.yaml
+                        sed -i 's/tag:*/tag: "${VERSION}"/g' app-democrm/values.yaml
                         echo 'Git Config'
                         git checkout master
                         git config --global user.email "Jenkins@internowany.click"
