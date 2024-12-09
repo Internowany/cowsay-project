@@ -102,6 +102,7 @@ pipeline {
             }
             steps {
                 echo '1Updating version in manifest...'
+                sh 'cd ..'
                 //withCredentials([string(credentialsId: 'internowany-at-github', variable: 'TOKEN')]) {
                     git branch: 'master', credentialsId: 'internowany-at-github', url: 'git@github.com:Internowany/demo-crm.git'
                     sh """
