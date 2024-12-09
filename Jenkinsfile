@@ -118,11 +118,13 @@ pipeline {
                 withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
                     sh """
                         rm -rf demo-crm
+                        git branch: 'master', credentialsId: 'Internowany', url: 'https://github.com/Internowany/cowsay-project.git'
                         git clone https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
                         pwd
                         ls
-                        sed -i 's/tag: */tag: "${VERSION}"/g' demo-crm/app-democrm/values.yaml
+                        sed -i 's/tag:*/tag: "${VERSION}"/g' demo-crm/app-democrm/values.yaml
                         echo 'Git Config'
+                        git checkout master
                         git config --global user.email "Jenkins@internowany.click"
                         git config --global user.name "Jenkins-ci"
                         git add .
