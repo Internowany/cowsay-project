@@ -120,7 +120,8 @@ pipeline {
                         rm -rf demo-crm
                         git clone https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
                         pwd
-                        sed -i "s/tag: .*/tag: ${VERSION}/g" demo-crm/app-democrm/values.yaml
+                        ls
+                        sed -i 's/tag: */tag: "${VERSION}"/g' demo-crm/app-democrm/values.yaml
                         echo 'Git Config'
                         git config --global user.email "Jenkins@internowany.click"
                         git config --global user.name "Jenkins-ci"'
