@@ -17,6 +17,7 @@ pipeline {
                 script {
                     COMMIT = sh(returnStdout: true, script:'git log --pretty=format:"%s" | head -1')
                     VERSION = sh(returnStdout: true, script:'git tag --sort=-creatordate | head -1')
+                    VERSION = "1.0.0"
                     sh "echo '${VERSION}'"
                     if ($VERSION == '') {
                         sh "echo 'v1.0.0 release'"
