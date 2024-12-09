@@ -116,7 +116,7 @@ pipeline {
                 }
                 echo 'Updating version in manifest...'
                 withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
-                    git branch: 'master', credentialsId: 'Internowany', url: 'https://github.com/Internowany/demo-crm.git'
+                    git branch: 'master', url: 'https://github.com/Internowany/demo-crm.git'
                     sh """
                         rm -rf demo-crm
                         git clone https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
