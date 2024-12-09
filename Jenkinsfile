@@ -84,7 +84,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy in Prod') {
+        /*stage('Deploy in Prod') {
             when {
                 expression { "${Release}" == 'True' }
             }
@@ -102,8 +102,8 @@ pipeline {
                     '''
                 }
             }
-        }
-        stage('Push tag to git') {
+        }*/
+        /*stage('Push tag to git') {
             when {
                 expression { "${Release}" == 'True' }
             }
@@ -114,7 +114,7 @@ pipeline {
                     sh "git push http://seba:$TOKEN@devops.internowany.click:8081/seba/cowsay_project.git tag ${VERSION}"
                 }
             }
-        }
+        }*/
         stage('Cleanup') {
             steps {
                 echo 'Cleaning garbage...'
