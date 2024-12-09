@@ -108,11 +108,25 @@ pipeline {
                 expression { "${Release}" == 'True' }
             }
             steps {
+                echo 'Tagging in git...'
                 sh "git tag ${VERSION}"
                 withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
                     //sh "git push origin tag ${VERSION}"
                     sh "git push https://Internowany:$TOKEN@github.com/Internowany/cowsay-project.git tag ${VERSION}"
                 }
+                echo 'Updating version in manifest...'
+                withCredentials([string(credentialsId: 'Internowany', variable: 'TOKEN')]) {
+                    sh """
+                        git clone https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
+                        sed -i "s/tag: .*/tag: ${VERSION}/g" app-democrm/values.yaml
+                        echo 'Git Config'
+                        git config --global user.email "Jenkins@internowany.click"
+                        git config --global user.name "Jenkins-ci"'
+                        git add app-democrm/values.yaml
+                        git commit -am "Update Image tag to ${VERSION}"
+                        git push https://Internowany:$TOKEN@github.com/Internowany/demo-crm.git
+                    """
+                }                
             }
         }
         stage('Cleanup') {
