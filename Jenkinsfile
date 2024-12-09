@@ -6,6 +6,7 @@ pipeline {
     environment {
         AWS_REGION = 'eu-central-1'
         ECR_REPO = '017820661172.dkr.ecr.eu-central-1.amazonaws.com/seba/cowsay_project'
+        IMAGE_TAG = 'latest' // or use 'BUILD_NUMBER' for a unique tag per build
         VERSION = ''
         COMMIT = ''
     }
@@ -16,42 +17,36 @@ pipeline {
                 script {
                     COMMIT = sh(returnStdout: true, script:'git log --pretty=format:"%s" | head -1')
                     VERSION = sh(returnStdout: true, script:'git tag --sort=-creatordate | head -1')
-                    if ($VERSION == '') {
-                        sh "echo 'v1.0.0 release'"
-                        VERSION = '1.0.0'
+                    def versionParts = VERSION.tokenize('.')
+                    def major = versionParts[0] as int
+                    def minor = versionParts[1] as int
+                    def patch = versionParts[2] as int
+
+                    if ("${COMMIT}".contains('[major]')) {
+                        sh "echo 'New MAJOR release'"
+                        major += 1
+                        minor = 0
+                        patch = 0
+                        Release = 'True'
+                    }
+                    else if ("${COMMIT}".contains('[minor]')) {
+                        sh "echo 'New MINOR release'"
+                        minor += 1
+                        patch = 0
+                        Release = 'True'
+                    }
+                    else if ("${COMMIT}".contains('[patch]')) {
+                        sh "echo 'New PATCH release'"
+                        patch += 1
                         Release = 'True'
                     }
                     else {
-                        def versionParts = VERSION.tokenize('.')
-                        def major = versionParts[0] as int
-                        def minor = versionParts[1] as int
-                        def patch = versionParts[2] as int
-
-                        if ("${COMMIT}".contains('[major]')) {
-                            sh "echo 'New MAJOR release'"
-                            major += 1
-                            minor = 0
-                            patch = 0
-                            Release = 'True'
-                        }
-                        else if ("${COMMIT}".contains('[minor]')) {
-                            sh "echo 'New MINOR release'"
-                            minor += 1
-                            patch = 0
-                            Release = 'True'
-                        }
-                        else if ("${COMMIT}".contains('[patch]')) {
-                            sh "echo 'New PATCH release'"
-                            patch += 1
-                            Release = 'True'
-                        }
-                        else {
-                            sh "echo 'Not for release'"
-                            Release = 'False'
-                        }
-                        def newVersion = "${major}.${minor}.${patch}"
-                        VERSION = "${newVersion}"
+                        sh "echo 'Not for release'"
+                        Release = 'False'
                     }
+                    def newVersion = "${major}.${minor}.${patch}"
+                    sh "echo 'New version: ${newVersion}'"
+                    VERSION = "${newVersion}"
                     sh "echo '${VERSION}'"
                 }
             }
@@ -60,6 +55,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 sh "./build"
+                sh "echo '${VERSION}'"
             }
         }
         stage('Test') {
@@ -74,6 +70,7 @@ pipeline {
             }
             steps {
                 echo 'Deploying to ECR...'
+                sh "echo '${VERSION}'"
                 script {
                     sh """
                         aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
@@ -94,7 +91,7 @@ pipeline {
             steps {
                 echo 'Deploying in Production...'
                 script {
-                    sh """
+                    sh '''
                         ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click -o StrictHostKeyChecking=accept-new "docker rm -f cowsay"
                         ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "rm -rf *"
                         ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}"
@@ -102,7 +99,7 @@ pipeline {
                         ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "docker tag ${ECR_REPO}:latest cowsay_project-app:latest"
                         ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "docker run -d -p 8082:8082 --name cowsay cowsay_project-app:latest"
                         ssh -i /var/jenkins_home/secrets/SebaKali.pem ubuntu@prod.internowany.click "docker rmi ${ECR_REPO}:latest"
-                    """
+                    '''
                 }
             }
         }*/
@@ -134,7 +131,7 @@ pipeline {
                 emailext(
                     to: '$DEFAULT_RECIPIENTS',
                     subject: "Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Good news! The build xwas successful.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nCheck it here: ${env.BUILD_URL}"
+                    body: "Good news! The build was successful.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nCheck it here: ${env.BUILD_URL}"
                 )
             }
         }
