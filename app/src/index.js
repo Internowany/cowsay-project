@@ -31,7 +31,7 @@ app.get('/', function (req, res) {
 
   var options = {
     method: 'GET',
-    url: 'http://www.wisdomofchopra.com/iframe.php'
+    url: 'https://www.google.com'
   };
 
   request(options, function (error, response, body) {
@@ -40,7 +40,7 @@ app.get('/', function (req, res) {
     var $ = cheerio.load(body);
     const st = $('h2', '#quote').text().replace(/\"/g, '').replace(/\_/g, '')
     const w = `
-v4.1.0 Deepak Chopra Quote:
+v4.1.1 Deepak Chopra Quote:
 
 " test test"
 
