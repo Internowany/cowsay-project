@@ -40,7 +40,7 @@ app.get('/', function (req, res) {
     var $ = cheerio.load(body);
     const st = $('h2', '#quote').text().replace(/\"/g, '').replace(/\_/g, '')
     const w = `
-v4.1.1 Deepak Chopra Quote:
+v4.1.2 Deepak Chopra Quote:
 
 " test test"
 
